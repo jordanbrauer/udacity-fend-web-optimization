@@ -10,16 +10,22 @@ const minifyImg = require('gulp-image');
 const inlineCss = require('gulp-inline-css');
 const concat = require('gulp-concat');
 const rename = require('gulp-rename');
+const merge = require('merge-stream');
 const del = require('del');
 
-/** CSS Cleaner */
+/**
+ * CSS Cleaner
+ * Clean generated CSS files.
+ */
 gulp.task('clean:css', () => {
   return del(pkg.globs.dist.css);
 });
 
-/** CSS Concat */
+/**
+ * CSS Concat
+ * Concatenate css files from package globs for each dist css destination.
+ */
 gulp.task('concat:css', () => {
-  /** Concatenate css files from package globs for each dist css destination. */
   return pkgStyles.forEach(key => {
     gulp.src(pkg.globs.src.css[key])
       .pipe(concat('styles.css'))
@@ -27,10 +33,12 @@ gulp.task('concat:css', () => {
   });
 });
 
-/** CSS Minify */
+/**
+ * CSS Minify
+ * Minify merged css files from package globs for each dist css destination.
+ */
 gulp.task('minify:css', () => {
   return pkgStyles.forEach(key => {
-    // console.log(pkg.paths.dist.css[key] + 'styles.css');
     gulp.src(pkg.paths.dist.css[key] + 'styles.css')
       .pipe(minifyCss())
       .pipe(rename({ suffix: '.min' }))
@@ -38,8 +46,29 @@ gulp.task('minify:css', () => {
   });
 });
 
-/** CSS Build */
+/**
+ * CSS Build
+ * Call individual CSS tasks from a single build task.
+ */
 gulp.task('build:css', ['clean:css', 'concat:css', 'minify:css']);
+
+/**
+ * CSS Injection
+ * Inject styles into HTML from CSS files to improve performance.
+ */
+gulp.task('inject:css', () => {
+  /** Copy over most recent HTML files. */
+  const stream_a = gulp.src('./src/**/*.html')
+    .pipe(gulp.dest('./dist/'));
+
+  /** Inject generated CSS into copied HTML files. */
+  const stream_b = gulp.src('./dist/**/*.html')
+    .pipe(inlineCss())
+    .pipe(gulp.dest('./dist/'));
+
+  /** Merge and return stream. */
+  return merge(stream_a, stream_b);
+});
 
 /** Default task for testing. */
 gulp.task('default', () => {

@@ -23,7 +23,8 @@
     "gulp-image": "^2.7.5",
     "gulp-inline-css": "^3.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^2.0.1"
+    "gulp-uglify": "^2.0.1",
+    "merge-stream": "^1.0.1"
   },
   "paths": {
     "src": {},
