@@ -5,11 +5,9 @@ const gulp = require('gulp');
 const minifyCss = require('gulp-cssnano');
 const minifyJs = require('gulp-uglify');
 const compressImg = require('gulp-image');
-const inlineCss = require('gulp-inline-css');
 const inline = require('gulp-inline');
 const concat = require('gulp-concat');
 const rename = require('gulp-rename');
-const merge = require('merge-stream');
 const del = require('del');
 
 //===============================================
@@ -136,7 +134,7 @@ gulp.task('compile:di', () => {
   return gulp.src(pkg.globs.dist.views)
     .pipe(inline({
       base: pkg.paths.dist,
-      disabledTypes: ['svg', 'img', 'js']
+      disabledTypes: ['svg']
     }))
     .pipe(gulp.dest(pkg.paths.dist.views));
 });
