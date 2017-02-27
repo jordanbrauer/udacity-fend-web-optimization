@@ -21,7 +21,34 @@
     "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.2",
     "gulp-image": "^2.7.5",
+    "gulp-inline-css": "^3.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^2.0.1"
+  },
+  "paths": {
+    "src": {},
+    "dist": {
+      "css": {
+        "main": "./dist/css/main/",
+        "pizza": "./dist/css/pizza/"
+      },
+      "js": "./dist/js/",
+      "img": "./dist/img/"
+    }
+  },
+  "globs": {
+    "src": {
+      "css": {
+        "main": [
+          "./src/css/main/styles.css",
+          "./src/css/main/print.css"
+        ],
+        "pizza": [
+          "./src/css/bootstrap/grid.css",
+          "./src/css/pizza/styles.css"
+        ]
+      }
+    },
+    "dist": {}
   }
 }
