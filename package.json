@@ -27,14 +27,23 @@
     "merge-stream": "^1.0.1"
   },
   "paths": {
-    "src": {},
+    "src": {
+      "css": {
+        "main": "./src/css/main/",
+        "pizza": "./src/css/pizza/"
+      },
+      "img": "./src/img/",
+      "js": "./src/js/",
+      "views": "./src/"
+    },
     "dist": {
       "css": {
         "main": "./dist/css/main/",
         "pizza": "./dist/css/pizza/"
       },
+      "img": "./dist/img/",
       "js": "./dist/js/",
-      "img": "./dist/img/"
+      "views": "./dist/"
     }
   },
   "globs": {
@@ -48,10 +57,12 @@
           "./src/css/bootstrap/grid.css",
           "./src/css/pizza/styles.css"
         ]
-      }
+      },
+      "views": "./src/**/*.html"
     },
     "dist": {
-      "css": "./dist/css/**/*.css"
+      "css": "./dist/css/**/*.css",
+      "views": "./dist/**/*.html"
     }
   }
 }
