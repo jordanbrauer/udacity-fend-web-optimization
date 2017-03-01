@@ -14,7 +14,9 @@
   },
   "homepage": "https://github.com/jordanbrauer/udacity-fend-web-optimization#readme",
   "scripts": {
-    "build": "gulp compile:static-content && gulp compile:di"
+    "postinstall": "gulp compile:static-content && gulp compile:di",
+    "compile": "npm run postinstall",
+    "docs": "jsdoc gulpfile.js"
   },
   "dependencies": {
     "gulp": "^3.9.1"
@@ -29,6 +31,7 @@
     "gulp-inline": "^0.1.3",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^2.0.1",
+    "jsdoc": "^3.4.3",
     "run-sequence": "^1.2.2"
   },
   "paths": {
