@@ -40,6 +40,7 @@ const largeFixtures = [
  * HTML Cleaner
  * @function clean:views
  * @desc Delete generated HTML files.
+ * @example gulp clean:views
  */
 gulp.task('clean:views', () => del(pkg.globs.dist.views));
 
@@ -47,6 +48,7 @@ gulp.task('clean:views', () => del(pkg.globs.dist.views));
  * HTML Compiler
  * @function compile:views
  * @desc Move HTML view files for DI.
+ * @example gulp compile:views
  */
 gulp.task('compile:views', () => {
   gulp.src(pkg.globs.src.views)
@@ -57,6 +59,7 @@ gulp.task('compile:views', () => {
  * HTML Builder
  * @function build:views
  * @desc move src html files to dist for dependency injection.
+ * @example gulp build:views
  */
 // gulp.task('build:views', ['clean:views', 'compile:views']);
 gulp.task('build:views', () => {
@@ -74,6 +77,7 @@ gulp.task('build:views', () => {
  * CSS Cleaner
  * @function clean:css
  * @desc Delete generated CSS files.
+ * @example gulp clean:css
  */
 gulp.task('clean:css', () => del(pkg.globs.dist.css));
 
@@ -81,6 +85,7 @@ gulp.task('clean:css', () => del(pkg.globs.dist.css));
  * CSS Compiler
  * @function compile:css
  * @desc Concatenate/minify CSS files from package globs for each dist css destination.
+ * @example gulp compile:css
  */
 gulp.task('compile:css', () => {
   return pkgStyles.forEach(key => {
@@ -96,6 +101,7 @@ gulp.task('compile:css', () => {
  * CSS Builder
  * @function build:css
  * @desc Call individual CSS tasks from a single build task.
+ * @example gulp build:css
  */
 // gulp.task('build:css', ['clean:css', 'compile:css']);
 gulp.task('build:css', () => {
@@ -113,6 +119,7 @@ gulp.task('build:css', () => {
  * JS Cleaner
  * @function clean:js
  * @desc Delete generated JS files.
+ * @example gulp clean:js
  */
 gulp.task('clean:js', () => del(pkg.globs.dist.js));
 
@@ -120,6 +127,7 @@ gulp.task('clean:js', () => del(pkg.globs.dist.js));
  * JS Compiler
  * @function compile:js
  * @desc Minify JS files for external use or DI.
+ * @example gulp compile:js
  */
 gulp.task('compile:js', () => {
   return gulp.src(pkg.globs.src.js)
@@ -132,6 +140,7 @@ gulp.task('compile:js', () => {
  * JS Build
  * @function build:js
  * @desc move src JS files to dist directory for DI.
+ * @example gulp build:js
  */
 // gulp.task('build:js', ['clean:js', 'compile:js']);
 gulp.task('build:js', () => {
@@ -149,6 +158,7 @@ gulp.task('build:js', () => {
  * Image Cleaner
  * @function clean:img
  * @desc Delete generated image files.
+ * @example gulp clean:img
  */
 gulp.task('clean:img', () => del(pkg.globs.dist.img));
 
@@ -191,6 +201,7 @@ gulp.task('compress:img', () => {
  * Image Resizer
  * @function resize:img
  * @desc Resize any large images from the largeFixtures array.
+ * @example gulp resize:img
  */
 gulp.task('resize:img', () => {
   return largeFixtures.forEach(key => {
@@ -204,6 +215,7 @@ gulp.task('resize:img', () => {
  * Image Builder
  * @function build:img
  * @desc compress image files from source to dist.
+ * @example gulp build:img
  */
 // gulp.task('build:img', ['clean:img', 'compress:img', 'resize:img']);
 gulp.task('build:img', () => {
@@ -230,6 +242,7 @@ gulp.task('build:img', () => {
  * Static Content Compiler
  * @function compile:static-content
  * @desc runs all static content build tasks before DI.
+ * @example gulp compile:static-content
  */
 // gulp.task('compile:static-content', ['build:views', 'build:css', 'build:js', 'build:img']);
 gulp.task('compile:static-content', () => {
@@ -243,6 +256,7 @@ gulp.task('compile:static-content', () => {
  * Dependency Injection
  * @function compile:di
  * @desc Inject styles, scripts and imgs into HTML from CSS/JS files for performance boost.
+ * @example gulp compile:di
  */
 gulp.task('compile:di', () => {
   return gulp.src(pkg.globs.dist.views)
@@ -267,6 +281,7 @@ gulp.task('compile:di', () => {
  * Super Cleaner
  * @function clean:all
  * @desc Deletes all generated files. Use as a reset.
+ * @example gulp clean:all
  */
 // gulp.task('clean:all', ['clean:views', 'clean:css', 'clean:js', 'clean:img'], () => del(pkg.paths.dist.views));
 gulp.task('clean:all', () => {
@@ -282,6 +297,8 @@ gulp.task('clean:all', () => {
  * Default
  * @function default
  * @desc task for testing Gulp installation.
+ * @example gulp
+ * @example gulp default
  */
 gulp.task('default', () => {
   console.log('Gulp is working!');
