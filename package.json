@@ -75,7 +75,7 @@
       "css": "./dist/css/**/*.css",
       "js": "./dist/js/**/*.js",
       "img": "./dist/img/*.*",
-      "views": "./dist/*/*.html"
+      "views": "./dist/**/*.html"
     }
   }
 }
