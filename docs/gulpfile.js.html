@@ -42,6 +42,7 @@ const resize = require('gulp-image-resize');
 const inline = require('gulp-inline');
 const concat = require('gulp-concat');
 const rename = require('gulp-rename');
+const chalk = require('chalk');
 const run = require('run-sequence');
 const del = require('del');
 
@@ -79,7 +80,7 @@ gulp.task('clean:views', () => del(pkg.globs.dist.views));
  * @example gulp compile:views
  */
 gulp.task('compile:views', () => {
-  gulp.src(pkg.globs.src.views)
+  return gulp.src(pkg.globs.src.views)
   .pipe(gulp.dest(pkg.paths.dist.views));
 });
 
@@ -191,7 +192,7 @@ gulp.task('build:js', () => {
 gulp.task('clean:img', () => del(pkg.globs.dist.img));
 
 /**
- * @alias Image Compressor
+ * Image Compressor
  * @function compress:img
  * @desc Compress images from src assets.
  * @example gulp compress:img
@@ -205,7 +206,7 @@ gulp.task('compress:img', () => {
       minifyImg.svgo({ progressive: true, interlaced: true })
     ], { verbose: true }))
     .pipe(compressImg({
-       // @BUG: After a few jpegs for gulp-image it craps out, even with
+       // BUG: After a few jpegs for gulp-image it craps out, even with
        // concurrency set to 1 at time. I also found that disabling the
        // jpeg compression engines that it would work fine since it skipped
        // the jpegs but that isn't what I want. I do indeed have both mozjpeg,
@@ -296,14 +297,47 @@ gulp.task('compile:di', () => {
 });
 
 //===============================================
-// Watch Tasks
-//===============================================
-
-// TODO: Add watch tasks for development. Implement browser-reload too.
-
-//===============================================
 // Default &amp; Misc Tasks
 //===============================================
+
+/**
+ * File Change Watcher
+ * @function watch
+ * @desc Watch the entire project filesystem for changes and run the respective task for updates.
+ * @example gulp watch
+ */
+gulp.task('watch', () => {
+  // Quick and dirty string template for watchers to log events into
+  let offender = (e) => `[${chalk.gray(e.type.toUpperCase())}] ${chalk.magenta(e.path)}`;
+
+  // HTML Watcher
+  gulp.watch(pkg.globs.src.views, (event) => {
+    // Log event, the offending file and run respective task(s).
+    console.log(offender(event));
+    run('build:views', 'compile:di');
+  });
+
+  // CSS watcher
+  gulp.watch(pkg.globs.src.css.base, (event) => {
+    // Log event, the offending file and run respective task(s).
+    console.log(offender(event));
+    run('build:css', 'compile:di');
+  });
+
+  // JS Watcher
+  gulp.watch(pkg.globs.src.js, (event) => {
+    // Log event, the offending file and run respective task(s).
+    console.log(offender(event));
+    run('build:js', 'compile:di');
+  });
+
+  // Image Watcher
+  gulp.watch(pkg.globs.src.img, (event) => {
+    // Log event, the offending file and run respective task(s).
+    console.log(offender(event));
+    run('build:img', 'compile:di');
+  });
+});
 
 /**
  * Super Cleaner
@@ -341,13 +375,13 @@ gulp.task('default', () => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#build:css">build:css</a></li><li><a href="global.html#build:img">build:img</a></li><li><a href="global.html#build:js">build:js</a></li><li><a href="global.html#build:views">build:views</a></li><li><a href="global.html#clean:all">clean:all</a></li><li><a href="global.html#clean:css">clean:css</a></li><li><a href="global.html#clean:img">clean:img</a></li><li><a href="global.html#clean:js">clean:js</a></li><li><a href="global.html#clean:views">clean:views</a></li><li><a href="global.html#compile:css">compile:css</a></li><li><a href="global.html#compile:di">compile:di</a></li><li><a href="global.html#compile:js">compile:js</a></li><li><a href="global.html#compile:static-content">compile:static-content</a></li><li><a href="global.html#compile:views">compile:views</a></li><li><a href="global.html#compress:img">compress:img</a></li><li><a href="global.html#default">default</a></li><li><a href="global.html#largeFixtures">largeFixtures</a></li><li><a href="global.html#pkg">pkg</a></li><li><a href="global.html#pkgStyles">pkgStyles</a></li><li><a href="global.html#resize:img">resize:img</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#build:css">build:css</a></li><li><a href="global.html#build:img">build:img</a></li><li><a href="global.html#build:js">build:js</a></li><li><a href="global.html#build:views">build:views</a></li><li><a href="global.html#clean:all">clean:all</a></li><li><a href="global.html#clean:css">clean:css</a></li><li><a href="global.html#clean:img">clean:img</a></li><li><a href="global.html#clean:js">clean:js</a></li><li><a href="global.html#clean:views">clean:views</a></li><li><a href="global.html#compile:css">compile:css</a></li><li><a href="global.html#compile:di">compile:di</a></li><li><a href="global.html#compile:js">compile:js</a></li><li><a href="global.html#compile:static-content">compile:static-content</a></li><li><a href="global.html#compile:views">compile:views</a></li><li><a href="global.html#compress:img">compress:img</a></li><li><a href="global.html#default">default</a></li><li><a href="global.html#largeFixtures">largeFixtures</a></li><li><a href="global.html#pkg">pkg</a></li><li><a href="global.html#pkgStyles">pkgStyles</a></li><li><a href="global.html#resize:img">resize:img</a></li><li><a href="global.html#watch">watch</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Mar 01 2017 10:16:00 GMT-0600 (CST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Mar 01 2017 21:18:29 GMT-0600 (CST)
 </footer>
 
 <script> prettyPrint(); </script>
