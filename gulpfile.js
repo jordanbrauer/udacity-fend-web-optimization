@@ -14,6 +14,7 @@ const resize = require('gulp-image-resize');
 const inline = require('gulp-inline');
 const concat = require('gulp-concat');
 const rename = require('gulp-rename');
+const chalk = require('chalk');
 const run = require('run-sequence');
 const del = require('del');
 
@@ -51,7 +52,7 @@ gulp.task('clean:views', () => del(pkg.globs.dist.views));
  * @example gulp compile:views
  */
 gulp.task('compile:views', () => {
-  gulp.src(pkg.globs.src.views)
+  return gulp.src(pkg.globs.src.views)
   .pipe(gulp.dest(pkg.paths.dist.views));
 });
 
@@ -163,7 +164,7 @@ gulp.task('build:js', () => {
 gulp.task('clean:img', () => del(pkg.globs.dist.img));
 
 /**
- * @alias Image Compressor
+ * Image Compressor
  * @function compress:img
  * @desc Compress images from src assets.
  * @example gulp compress:img
@@ -177,7 +178,7 @@ gulp.task('compress:img', () => {
       minifyImg.svgo({ progressive: true, interlaced: true })
     ], { verbose: true }))
     .pipe(compressImg({
-       // @BUG: After a few jpegs for gulp-image it craps out, even with
+       // BUG: After a few jpegs for gulp-image it craps out, even with
        // concurrency set to 1 at time. I also found that disabling the
        // jpeg compression engines that it would work fine since it skipped
        // the jpegs but that isn't what I want. I do indeed have both mozjpeg,
@@ -268,14 +269,47 @@ gulp.task('compile:di', () => {
 });
 
 //===============================================
-// Watch Tasks
-//===============================================
-
-// TODO: Add watch tasks for development. Implement browser-reload too.
-
-//===============================================
 // Default & Misc Tasks
 //===============================================
+
+/**
+ * File Change Watcher
+ * @function watch
+ * @desc Watch the entire project filesystem for changes and run the respective task for updates.
+ * @example gulp watch
+ */
+gulp.task('watch', () => {
+  // Quick and dirty string template for watchers to log events into
+  let offender = (e) => `[${chalk.gray(e.type.toUpperCase())}] ${chalk.magenta(e.path)}`;
+
+  // HTML Watcher
+  gulp.watch(pkg.globs.src.views, (event) => {
+    // Log event, the offending file and run respective task(s).
+    console.log(offender(event));
+    run('build:views', 'compile:di');
+  });
+
+  // CSS watcher
+  gulp.watch(pkg.globs.src.css.base, (event) => {
+    // Log event, the offending file and run respective task(s).
+    console.log(offender(event));
+    run('build:css', 'compile:di');
+  });
+
+  // JS Watcher
+  gulp.watch(pkg.globs.src.js, (event) => {
+    // Log event, the offending file and run respective task(s).
+    console.log(offender(event));
+    run('build:js', 'compile:di');
+  });
+
+  // Image Watcher
+  gulp.watch(pkg.globs.src.img, (event) => {
+    // Log event, the offending file and run respective task(s).
+    console.log(offender(event));
+    run('build:img', 'compile:di');
+  });
+});
 
 /**
  * Super Cleaner
